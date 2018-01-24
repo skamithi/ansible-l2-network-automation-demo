@@ -23,7 +23,7 @@ None
 Example Playbook
 ----------------
 
-
+```
 - hosts: all
   connection: local
   vars:
@@ -36,6 +36,7 @@ Example Playbook
     - role: switch-system
       domain_name: linuxsimba.local
 
+```
 
 License
 -------
