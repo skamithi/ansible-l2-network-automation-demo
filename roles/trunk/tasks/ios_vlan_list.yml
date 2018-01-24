@@ -1,0 +1,13 @@
+- name: get vlan list
+  ios_command:
+    commands:
+      - show vlan
+  register: vlan_output
+
+- name: parse vlan output to obtain vlan list with port members
+  set_fact:
+    ios_vlans: "{{ vlan_output.stdout[0] | parse_cli('./parsers/ios/ios_show_vlan_parser.yml')}}"
+
+- name: "attempt to see if {{ vlan_id }} exists and assign the found entry to found_vlan var"
+  set_fact:
+    found_vlan: "{{ ios_vlans | json_query(\"vlans[?id==`\" + vlan_id + \"`]\") }}"

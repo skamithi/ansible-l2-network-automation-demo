@@ -1,0 +1,7 @@
+{% for iface in ports_to_update %}
+interface {{ iface }}
+  switchport
+  switchport trunk encapsulation dot1q
+  switchport mode trunk
+  switchport trunk allowed vlan add {{ vlan_id }}
+{% endfor %}

@@ -1,2 +1,17 @@
 ---
 
+- name: get vlan list and assign a variable called `found_vlan` based on the vlan_id
+  include_tasks: ios_vlan_list.yml
+
+- name: "create a variable that keeps a list of ports that need to be configured with the vlan"
+  set_fact:
+    ports_to_update:  "{{ trunk_ifaces| difference(found_vlan[0].ports) }}"
+
+# Create a block to manage installation of the VLAN
+- block:
+  - name: add vlan to IOS device
+    ios_config:
+      src: 'ios.j2'
+    notify: save ios config
+
+  when: "ports_to_update != []"

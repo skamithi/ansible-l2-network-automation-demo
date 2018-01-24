@@ -1,0 +1,4 @@
+trunk_ifaces:
+  - GigabitEthernet1/1
+  - GigabitEthernet1/2
+  - GigabitEthernet1/3
