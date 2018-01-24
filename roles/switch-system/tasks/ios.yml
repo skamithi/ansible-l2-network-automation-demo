@@ -1,4 +1,4 @@
 ---
-- name: configure hostname and domain name
+- name: configure hostname and domain name and disable domain lookup
   ios_config:
     src: 'ios.j2'

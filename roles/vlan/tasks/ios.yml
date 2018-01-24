@@ -1,0 +1,27 @@
+---
+# VLAN information is stored in vlan.dat file so it not exposed to the the
+# switch running configuration. To view the contents of vlan.dat one has to run
+# show vlan. So to make this role idempotent first check the vlan database to
+# see if the vlan exists. If the vlan does not exist then run  install the vlan
+# in the database. If the vlan exists then skip the vlan installation step.
+
+
+- name: get vlan list
+  include_tasks: ios_vlan_list.yml
+
+
+# Create a block to manage installation of the VLAN
+- block:
+  - name: add vlan to IOS device
+    ios_config:
+      src: 'ios.j2'
+    notify: save ios config
+
+  - name: get updated vlan list
+    include_tasks: ios_vlan_list.yml
+
+  - assert:
+      msg: "Vlan {{ vlan_id }} not properly installed in the database"
+      that:
+        - "found_vlan != []"
+  when: "found_vlan == [] or found_vlan[0].name != vlan_name"

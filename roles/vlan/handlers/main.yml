@@ -1,0 +1,16 @@
+---
+- name: save nxos config
+  nxos_config:
+    diff_against: startup
+    diff_ignore_lines:
+      - "^mac-address"
+    save_when: modified
+  diff: yes
+
+- name: save ios config
+  ios_config:
+    diff_against: startup
+    diff_ignore_lines: []
+    save_when: modified
+  diff: yes
+
