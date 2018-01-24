@@ -1,0 +1,15 @@
+---
+- name: Ensure interface-vlan feature is enabled
+  nxos_feature:
+    feature: interface-vlan
+    state: enabled
+
+- name: Ensure HSRP feature is enabled
+  nxos_feature:
+    feature: hsrp
+    state: enabled
+
+- name: configure SVIs
+  nxos_config:
+    src: 'nxos.j2'
+  notify: save nxos config

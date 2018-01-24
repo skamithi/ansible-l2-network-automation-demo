@@ -1,0 +1,21 @@
+---
+- hosts: core
+  connection: local
+  gather_facts: no
+  vars:
+    login_info:
+      host: "{{ ansible_host }}"
+      username: "{{ ansible_username }}"
+      password: "{{ ansible_password }}"
+  pre_tasks:
+    - assert:
+        that: vlan_id is defined
+        msg: "vlan_id is not included as an extra var"
+
+    - assert:
+        that: vlan_name is defined
+        msg: "vlan_name is not included as an extra var"
+  roles:
+    - { role: switch-system, tags: system }
+    - { role: vlan, tags: vlan }
+    - { role: svi, tags: svi }

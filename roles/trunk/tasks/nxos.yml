@@ -1,0 +1,39 @@
+---
+# The way this module adds VLANS does not use a source of truth. The process is
+# additive. This means that this module without some kind of checks is not
+# idempotent. To make it idempotent, the vlan database is queried to get a list
+# of all port members in a VLAN. if all trunk interfaces are in the vlan, then
+# do not add the VLAN to the trunk list. Otherwise this role will attempt to add
+# all trunk ports provided by the user in ``trunk_ifaces`` that do not have this vlan
+# This module assumes that the VLAN already exists. Otherwise it fails
+# spectacularly
+
+
+- name: get the vlan database details in CLI format
+  nxos_command:
+    commands: "show vlan brief"
+  register: vlan_output
+
+- name: convert the vlan database CLI details into a JSON object
+  set_fact:
+    nxos_vlans: "{{ vlan_output.stdout[0] | parse_cli('./parsers/nxos/nxos_show_vlan_brief_parser.yml') }}"
+
+- name: "get VLAN {{ vlan_id }} details"
+  set_fact:
+    vlan_details: "{{ nxos_vlans |json_query(\"vlans[?id==`\" + vlan_id + \"`]\") }}"
+
+- name: Check if the VLAN exists, otherwise exit this play
+  assert:
+    that: vlan_details != []
+    msg: "VLAN {{ vlan_id }} does not exist"
+
+- name: "create a variable that keeps a list of ports that need to be configured with the vlan"
+  set_fact:
+    ports_to_update:  "{{ trunk_ifaces| difference(vlan_details[0].ports) }}"
+
+- block:
+  - name: add VLAN to the trunk list
+    nxos_config:
+      src: 'nxos.j2'
+    notify: save nxos config
+  when: "ports_to_update != []"

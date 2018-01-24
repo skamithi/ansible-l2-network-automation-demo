@@ -1,0 +1,8 @@
+{% for svi in svi_interfaces %}
+interface Vlan{{ svi.vlan_id }}
+  no shutdown
+  ip address {{ svi.address }}
+  hsrp {{svi.vlan}}
+    priority {{svi.priority}}
+    ip {{ svi.vip }}
+{% endfor %}

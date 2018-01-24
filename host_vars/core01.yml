@@ -1,0 +1,4 @@
+trunk_ifaces:
+  - Ethernet2/1
+  - Ethernet2/2
+  - Ethernet2/3
