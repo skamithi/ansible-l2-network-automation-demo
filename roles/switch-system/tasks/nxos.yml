@@ -1,0 +1,6 @@
+---
+- name: Set hostname and domain name
+  nxos_system:
+    hostname: "{{ inventory_hostname }}"
+    domain_name: "{{ domain_name }}"
+    state: present

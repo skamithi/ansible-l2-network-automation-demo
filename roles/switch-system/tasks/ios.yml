@@ -1,0 +1,4 @@
+---
+- name: configure hostname and domain name
+  ios_config:
+    src: 'ios.j2'

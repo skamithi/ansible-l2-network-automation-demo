@@ -1,0 +1,31 @@
+---
+#- name: configure vlans in Nexus OS
+#  nxos_vlan:
+#    vlan_range: "{{ vlan_range }}"
+#  when: initial_vlan_config == True
+
+- name: configure configure a single vlan
+  nxos_vlan:
+    vlan_id: "{{ vlan_id }}"
+
+- name: add a description for the vlan
+  nxos_config:
+    src: 'nxos.j2'
+
+- name: get vlan list
+  nxos_facts:
+    gather_subset: legacy
+  register: nxos_facts_collected
+
+- name: assign list of vlans to the 'vlan_list' var. to make it easier to reference later
+  set_fact:
+    vlan_list: "{{ nxos_facts_collected.ansible_facts.vlan_list }}"
+
+- name: print vlan list (DEBUG)
+  debug: var=vlan_list
+
+  #- name: check if vlan is in the vlan list
+  #assert:
+  #  msg: "{{ vlan_id }} not found in the VLAN list"
+  #  that: "vlan_id in vlan_list"
+

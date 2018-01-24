@@ -1,0 +1,11 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: no
+  vars:
+    login_info:
+      host: "{{ ansible_host }}"
+      username: "{{ ansible_username }}"
+      password: "{{ ansible_password }}"
+  roles:
+    - role: switch-system
