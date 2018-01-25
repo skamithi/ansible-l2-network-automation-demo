@@ -3,12 +3,12 @@
 - name: configure configure a single vlan
   nxos_vlan:
     vlan_id: "{{ vlan_id }}"
-  notify: nxos_save_config
+  notify: save nxos config
 
 - name: add a description for the vlan
   nxos_config:
     src: 'nxos.j2'
-  notify: nxos_save_config
+  notify: save nxos config
 
 - name: get vlan list
   nxos_facts:

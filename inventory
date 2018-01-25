@@ -5,8 +5,8 @@ domain_name=linuxsimba.local
 ansible_network_os=nxos
 
 [core]
-core01 ansible_host=10.100.1.10 ansible_user=ansible
-core02 ansible_host=10.100.1.11 ansible_user=ansible
+core01 ansible_host=10.100.1.10 ansible_user=ansible primary_stp_switch=true
+core02 ansible_host=10.100.1.11 ansible_user=ansible secondary_stp_switch=true
 
 [cat6k:vars]
 ansible_network_os=ios

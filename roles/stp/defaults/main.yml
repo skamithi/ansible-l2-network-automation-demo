@@ -1,0 +1,3 @@
+stp_priority: 32768
+primary_stp_priority: 8192
+secondary_stp_priority: 16384

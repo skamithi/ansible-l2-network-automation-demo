@@ -1,0 +1,14 @@
+- name: "set stp priority to {{ primary_stp_priority }}"
+  set_fact:
+    stp_priority: "{{ primary_stp_priority }}"
+  when: primary_stp_switch is defined
+
+- name: "set stp priority to {{ secondary_stp_priority }}"
+  set_fact:
+    stp_priority: "{{ secondary_stp_priority }}"
+  when: secondary_stp_switch is defined
+
+- name: "configure STP priority for {{ vlan_id }} - NOT IDEMPOTENT"
+  nxos_config:
+    src: 'nxos.j2'
+  notify: save nxos config
